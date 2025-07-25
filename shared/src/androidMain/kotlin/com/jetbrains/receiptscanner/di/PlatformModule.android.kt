@@ -36,4 +36,24 @@ actual val platformModule = module {
             environment = "sandbox" // TODO: Move to configuration
         )
     }
+
+    // Vision components
+    single<com.jetbrains.receiptscanner.data.vision.ImageProcessor> {
+        com.jetbrains.receiptscanner.data.vision.ImageProcessorFactory.create()
+    }
+    single<com.jetbrains.receiptscanner.data.vision.ImagePreprocessor> {
+        com.jetbrains.receiptscanner.data.vision.VisionComponentFactory.createImagePreprocessor()
+    }
+    single<com.jetbrains.receiptscanner.data.vision.ONNXRuntimeEngine> {
+        com.jetbrains.receiptscanner.data.vision.VisionComponentFactory.createONNXRuntimeEngine()
+    }
+    single<com.jetbrains.receiptscanner.data.vision.ReceiptDetector> {
+        com.jetbrains.receiptscanner.data.vision.VisionComponentFactory.createReceiptDetector(
+            onnxEngine = get(),
+            imagePreprocessor = get()
+        )
+    }
+    single<com.jetbrains.receiptscanner.data.vision.ImageQualityAssessor> {
+        com.jetbrains.receiptscanner.data.vision.ImageQualityAssessorFactory.create()
+    }
 }

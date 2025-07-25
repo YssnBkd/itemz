@@ -32,18 +32,21 @@
   - Commit and push changes: `git add . && git commit -m "feat: implement bank account integration with Plaid API" && git push`
   - _Requirements: 10.1, 10.2, 11.1, 11.2, 11.3_
 
-- [ ] 4. Build computer vision pipeline for receipt detection
-  - Train lightweight MobileNet/EfficientDet model for receipt boundary detection
-  - Convert receipt detection model to TensorFlow Lite format for mobile deployment
-  - Implement real-time receipt detection with bounding box overlay in camera preview
-  - Create quality assessment pipeline for lighting, focus, and angle evaluation
-  - Build receipt detection confidence scoring for automatic capture triggering
-  - Run `./gradlew clean build` to verify project setup and resolve any build issues
-  - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
-  - Commit and push changes: `git add . && git commit -m "feat: implement computer vision pipeline for receipt detection" && git push`
+- [x] 4. Build computer vision pipeline for receipt detection and preprocessing
+  - Set up ONNX Runtime Mobile for both Android and iOS platforms in KMP project
+  - Download and integrate PaddleOCR PP-OCRv5 detection model (converted to ONNX format)
+  - Implement expect/actual pattern for platform-specific ONNX Runtime integration
+  - Create real-time receipt boundary detection with bounding box overlay in camera preview
+  - Build image preprocessing pipeline (resize, normalize, format conversion for ONNX input)
+  - Implement receipt detection confidence scoring for automatic capture triggering
+  - Add memory management for model loading and inference operations
+  - Create quality assessment pipeline for lighting, focus, and angle evaluation using OpenCV
+  - Run `./gradlew clean build` to verify ONNX Runtime integration and model loading
+  - Test receipt detection accuracy with various receipt types and lighting conditions
+  - Commit and push changes: `git add . && git commit -m "feat: implement computer vision pipeline with PaddleOCR PP-OCRv5 detection" && git push`
   - _Requirements: 1.1, 1.2, 2.1, 2.4, 2.5_
 
-- [ ] 4.1 Implement OpenCV Mobile for geometric corrections
+- [x] 4.1 Implement OpenCV Mobile for geometric corrections
   - Set up OpenCV Mobile integration for both Android and iOS platforms
   - Create perspective correction algorithms for skewed receipt images
   - Implement automatic rotation detection and correction
@@ -54,7 +57,7 @@
   - Commit and push changes: `git add . && git commit -m "feat: implement OpenCV Mobile for geometric corrections" && git push`
   - _Requirements: 1.5, 2.6, 4.1_
 
-- [ ] 4.2 Create real-time image quality assessment system
+- [x] 4.2 Create real-time image quality assessment system
   - Implement lighting uniformity analysis using histogram evaluation
   - Build focus quality detection using gradient magnitude analysis
   - Create receipt boundary completeness validation
@@ -65,47 +68,69 @@
   - Commit and push changes: `git add . && git commit -m "feat: create real-time image quality assessment system" && git push`
   - _Requirements: 2.1, 2.2, 2.3, 2.4_
 
-- [ ] 5. Implement multi-stage OCR processing architecture
-  - Design Stage 1: Fast preview OCR for real-time guidance (<500ms)
-  - Build Stage 2: Full OCR processing pipeline (1-3 seconds)
-  - Create OCR stage coordinator to manage processing flow
-  - Implement background processing to avoid blocking UI threads
-  - Add processing stage progress tracking and user feedback
-  - Run `./gradlew clean build` to verify project setup and resolve any build issues
-  - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
-  - Commit and push changes: `git add . && git commit -m "feat: implement multi-stage OCR processing architecture" && git push`
+- [ ] 5. Implement multi-stage OCR processing architecture with PaddleOCR PP-OCRv5
+  - Download and convert PaddleOCR PP-OCRv5 recognition models to ONNX format (text recognition)
+  - Design Stage 1: Fast text detection using lightweight detection model (<500ms)
+  - Build Stage 2: Full text recognition pipeline using PP-OCRv5 recognition model (1-3 seconds)
+  - Create OCREngine interface with expect/actual implementations for Android/iOS
+  - Implement model caching and warming strategies to reduce cold-start latency
+  - Build OCR stage coordinator to manage detection → recognition → post-processing flow
+  - Implement background processing using coroutines to avoid blocking UI threads
+  - Add processing stage progress tracking with realistic time estimates based on text density
+  - Create memory management system for large model files (detection: ~8MB, recognition: ~12MB)
+  - Implement model quantization for faster inference on mobile devices
+  - Run `./gradlew clean build` to verify ONNX Runtime integration and model loading
+  - Test OCR processing speed and accuracy with real grocery receipts
+  - Commit and push changes: `git add . && git commit -m "feat: implement multi-stage OCR with PaddleOCR PP-OCRv5" && git push`
   - _Requirements: 3.1, 3.2, 3.4, 3.5_
 
-- [ ] 5.1 Build Stage 1: Fast preview OCR with PaddleOCR text detection
-  - Integrate PaddleOCR text detection model (detection only, no recognition)
-  - Convert PaddleOCR detection model to LiteRT format for mobile
-  - Implement fast text region detection for "receipt detected" feedback
-  - Create text density analysis to confirm receipt presence
-  - Build quality assessment integration with text detection results
-  - Run `./gradlew clean build` to verify project setup and resolve any build issues
-  - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
-  - Commit and push changes: `git add . && git commit -m "feat: build Stage 1 fast preview OCR with PaddleOCR text detection" && git push`
+- [ ] 5.1 Build Stage 1: Fast preview OCR with PaddleOCR PP-OCRv5 text detection
+  - Set up PaddleOCR PP-OCRv5 detection model (ch_PP-OCRv5_det_infer.onnx) for fast text region detection
+  - Implement platform-specific ONNX Runtime inference engines (Android: OrtSession, iOS: ONNXRuntime)
+  - Create fast text region detection pipeline optimized for real-time camera preview (<500ms)
+  - Build text density analysis to confirm receipt presence and estimate processing complexity
+  - Implement receipt quality scoring based on detected text regions (coverage, alignment, clarity)
+  - Add preprocessing optimizations: image downscaling for detection, efficient memory allocation
+  - Create text region visualization overlay for camera preview feedback
+  - Build quality assessment integration with text detection confidence scores
+  - Implement error handling for model loading failures and inference errors
+  - Run `./gradlew clean build` to verify ONNX Runtime integration and detection model performance
+  - Test detection speed and accuracy with various receipt orientations and lighting conditions
+  - Commit and push changes: `git add . && git commit -m "feat: build Stage 1 fast preview OCR with PaddleOCR PP-OCRv5 detection" && git push`
   - _Requirements: 1.2, 2.1, 3.1_
 
-- [ ] 5.2 Implement Stage 2: Full OCR processing with PaddleOCR PP-OCRv4+
-  - Convert PaddleOCR PP-OCRv4+ recognition models to LiteRT format
-  - Create platform-specific OCR engine wrappers (expect/actual classes)
-  - Implement full text recognition pipeline with character-level confidence
-  - Set up model caching and warming strategies for optimal performance
-  - Add memory management for large model loading and processing
-  - Run `./gradlew clean build` to verify project setup and resolve any build issues
-  - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
-  - Commit and push changes: `git add . && git commit -m "feat: implement Stage 2 full OCR processing with PaddleOCR PP-OCRv4+" && git push`
+- [ ] 5.2 Implement Stage 2: Full OCR processing with PaddleOCR PP-OCRv5 recognition
+  - Set up PaddleOCR PP-OCRv5 recognition model (ch_PP-OCRv5_rec_infer.onnx) for full text recognition
+  - Create platform-specific OCR engine wrappers using expect/actual pattern for KMP
+  - Implement full text recognition pipeline with character-level confidence scores from PP-OCRv5
+  - Build text line processing: detection results → cropped regions → recognition → confidence scoring
+  - Set up model caching and warming strategies to minimize cold-start latency (preload models on app start)
+  - Add memory management for large model files and inference tensors (proper cleanup after processing)
+  - Implement batch processing for multiple text regions to optimize inference performance
+  - Create text post-processing pipeline: confidence filtering, character correction, line assembly
+  - Build progressive feedback system showing recognized text as processing completes
+  - Add fallback handling for recognition failures (retry with different preprocessing)
+  - Implement model quantization options for faster inference on lower-end devices
+  - Run `./gradlew clean build` to verify ONNX Runtime integration and recognition model performance
+  - Test recognition accuracy with real grocery receipts and measure processing times
+  - Commit and push changes: `git add . && git commit -m "feat: implement Stage 2 full OCR processing with PaddleOCR PP-OCRv5 recognition" && git push`
   - _Requirements: 3.2, 3.3, 4.1, 4.2_
 
 - [ ] 6. Build receipt-specific text structure analysis system
-  - Create merchant header detection using pattern matching and positioning
-  - Implement item line identification and grouping based on text alignment
-  - Build price column alignment detection for accurate price extraction
-  - Add total section identification (subtotal, tax, final total)
-  - Create date/time extraction with multiple format support
-  - Run `./gradlew clean build` to verify project setup and resolve any build issues
-  - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Create ReceiptParser class to analyze OCR results from PaddleOCR PP-OCRv5 output
+  - Implement merchant header detection using pattern matching, positioning, and font size analysis
+  - Build item line identification using text alignment, spacing patterns, and price detection
+  - Create price column alignment detection with regex patterns for currency formats ($X.XX, X.XX, etc.)
+  - Add total section identification (subtotal, tax, final total) using keyword matching and positioning
+  - Implement date/time extraction with multiple format support (MM/DD/YYYY, DD/MM/YYYY, etc.)
+  - Build receipt layout classification for major grocery chains (Walmart, Target, Kroger, etc.)
+  - Create text region classification (header, items, totals, footer) based on position and content
+  - Implement quantity detection in item lines (2x, 3 @, etc.) with price calculation validation
+  - Add receipt boundary validation to ensure complete capture of all sections
+  - Build confidence scoring for each parsed section based on pattern matching success
+  - Create structured data output format (ReceiptData class) from raw OCR text
+  - Run `./gradlew clean build` to verify text parsing logic and structured data extraction
+  - Test parsing accuracy with receipts from major grocery chains
   - Commit and push changes: `git add . && git commit -m "feat: build receipt-specific text structure analysis system" && git push`
   - _Requirements: 4.2, 4.3, 4.4_
 
@@ -131,26 +156,41 @@
   - Commit and push changes: `git add . && git commit -m "feat: build multi-level confidence scoring system" && git push`
   - _Requirements: 4.6, 5.1, 5.2_
 
-- [ ] 7. Add EasyOCR as fallback engine for challenging receipts
-  - Integrate EasyOCR mobile models optimized for noisy/crumpled receipts
-  - Implement confidence-based fallback logic between OCR engines
-  - Create unified OCR result interface for consistent processing
-  - Add performance monitoring to track OCR engine effectiveness
-  - Optimize memory usage when switching between OCR engines
-  - Run `./gradlew clean build` to verify project setup and resolve any build issues
-  - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
-  - Commit and push changes: `git add . && git commit -m "feat: add EasyOCR as fallback engine for challenging receipts" && git push`
+- [ ] 7. Add Tesseract OCR as fallback engine for challenging receipts
+  - Integrate Tesseract Mobile (TessTwo for Android, TesseractOCRiOS for iOS) as secondary OCR engine
+  - Implement confidence-based fallback logic: if PaddleOCR confidence < 0.7, retry with Tesseract
+  - Create unified OCRResult interface to standardize output from both PaddleOCR and Tesseract
+  - Build OCREngineManager to coordinate between primary (PaddleOCR) and fallback (Tesseract) engines
+  - Add preprocessing optimizations specific to Tesseract (contrast enhancement, noise reduction)
+  - Implement performance monitoring to track OCR engine effectiveness and processing times
+  - Create memory management system to handle multiple OCR engines without excessive RAM usage
+  - Build retry logic with different preprocessing approaches for failed OCR attempts
+  - Add engine selection heuristics based on receipt characteristics (crumpled, faded, etc.)
+  - Implement parallel processing option for speed-critical scenarios (both engines simultaneously)
+  - Create fallback chain: PaddleOCR → Tesseract → Manual entry prompt
+  - Run `./gradlew clean build` to verify dual OCR engine integration and fallback logic
+  - Test fallback effectiveness with challenging receipt images (crumpled, faded, skewed)
+  - Commit and push changes: `git add . && git commit -m "feat: add Tesseract OCR as fallback engine for challenging receipts" && git push`
   - _Requirements: 4.1, 4.6, 7.2_
 
-- [ ] 8. Build comprehensive OCR validation system with heuristics
-  - Create OCRValidator with currency format validation (regex patterns)
-  - Implement total-vs-sum validation for mathematical consistency
-  - Add item structure validation (names, prices, quantities)
-  - Build merchant name validation against known grocery chain database
-  - Create receipt format validation for major grocery store layouts
-  - Run `./gradlew clean build` to verify project setup and resolve any build issues
-  - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
-  - Commit and push changes: `git add . && git commit -m "feat: build comprehensive OCR validation system with heuristics" && git push`
+- [ ] 8. Build comprehensive OCR validation system with intelligent heuristics
+  - Create OCRValidator class with multi-level validation pipeline for PaddleOCR results
+  - Implement currency format validation using regex patterns ($X.XX, X.XX USD, etc.) with regional support
+  - Build mathematical consistency validation: item prices × quantities = line totals, sum = subtotal
+  - Add item structure validation: reasonable item names, valid price ranges, logical quantities
+  - Create merchant name validation against comprehensive grocery chain database (500+ chains)
+  - Implement receipt format validation for major grocery store layouts and receipt templates
+  - Build confidence scoring system combining OCR confidence + validation heuristics
+  - Add contextual validation: grocery-specific item names, reasonable price ranges per category
+  - Implement cross-validation between multiple OCR engines when available
+  - Create validation error categorization (low confidence, math errors, format issues, etc.)
+  - Build automatic correction suggestions for common OCR errors (0→O, 1→I, etc.)
+  - Add receipt completeness validation (header, items, totals all present)
+  - Implement validation result visualization for user review and correction
+  - Create validation bypass options for edge cases and unusual receipt formats
+  - Run `./gradlew clean build` to verify validation logic and heuristic accuracy
+  - Test validation effectiveness with diverse receipt types and intentionally corrupted OCR results
+  - Commit and push changes: `git add . && git commit -m "feat: build comprehensive OCR validation system with intelligent heuristics" && git push`
   - _Requirements: 4.6, 5.1, 5.2, 5.3_
 
 - [ ] 9. Implement platform-specific camera integration

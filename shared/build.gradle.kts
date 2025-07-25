@@ -35,6 +35,7 @@ kotlin {
             implementation(libs.sqldelight.android.driver)
             implementation(libs.plaid.android)
             implementation(libs.androidx.security.crypto)
+            implementation(libs.onnxruntime.android)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
