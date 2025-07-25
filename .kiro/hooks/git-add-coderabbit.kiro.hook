@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Git Add CodeRabbit Review",
+  "description": "Automatically triggers a full CodeRabbit review after any git add command and then improves the code based on the review feedback",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      ".git/index"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A git add command has been executed. Please perform a comprehensive CodeRabbit review of all staged files and then improve the code according to the review findings. Focus on code quality, best practices, potential bugs, performance optimizations, and maintainability improvements."
+  }
+}
