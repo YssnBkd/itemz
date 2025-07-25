@@ -18,6 +18,8 @@ sqldelight = "2.0.2"
 androidx-room = "2.7.0"
 androidx-camera = "1.4.1"
 coroutines = "1.10.2"
+plaid = "4.1.0"
+security-crypto = "1.1.0-alpha06"
 
 
 [libraries]
@@ -48,6 +50,8 @@ sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", ver
 sqldelight-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
 sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+plaid-android = { module = "com.plaid.link:sdk-core", version.ref = "plaid" }
+androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
 
 
 [plugins]

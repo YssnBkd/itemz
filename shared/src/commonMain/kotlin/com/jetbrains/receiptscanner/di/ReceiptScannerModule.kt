@@ -5,9 +5,10 @@ import com.jetbrains.receiptscanner.data.datasource.BankDataSource
 import com.jetbrains.receiptscanner.data.datasource.BankDataSourceImpl
 import com.jetbrains.receiptscanner.data.datasource.ReceiptDataSource
 import com.jetbrains.receiptscanner.data.datasource.ReceiptDataSourceImpl
-
 import com.jetbrains.receiptscanner.data.repository.BankRepositoryImpl
 import com.jetbrains.receiptscanner.data.repository.ReceiptRepositoryImpl
+import com.jetbrains.receiptscanner.data.service.TransactionCategorizationService
+import com.jetbrains.receiptscanner.data.service.TransactionSyncService
 import com.jetbrains.receiptscanner.database.ReceiptScannerDatabase
 import com.jetbrains.receiptscanner.domain.repository.BankRepository
 import com.jetbrains.receiptscanner.domain.repository.ReceiptRepository
@@ -23,9 +24,20 @@ val receiptScannerModule = module {
     singleOf(::DatabaseFactory)
     single<ReceiptScannerDatabase> { get<DatabaseFactory>().createDatabase() }
 
+    // Services
+    singleOf(::TransactionCategorizationService)
+    single { TransactionSyncService(bankDataSource = get()) }
+
     // Data Sources
     singleOf(::ReceiptDataSourceImpl) bind ReceiptDataSource::class
-    singleOf(::BankDataSourceImpl) bind BankDataSource::class
+    single<BankDataSource> {
+        BankDataSourceImpl(
+            database = get(),
+            plaidService = get(),
+            secureStorage = get(),
+            categorizationService = get()
+        )
+    }
 
     // Repositories
     singleOf(::ReceiptRepositoryImpl) bind ReceiptRepository::class

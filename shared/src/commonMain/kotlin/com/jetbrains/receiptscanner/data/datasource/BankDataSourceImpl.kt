@@ -1,5 +1,11 @@
 package com.jetbrains.receiptscanner.data.datasource
 
+import com.jetbrains.receiptscanner.data.security.SecureStorage
+import com.jetbrains.receiptscanner.data.security.SecureStorageKeys
+import com.jetbrains.receiptscanner.data.service.PlaidService
+import com.jetbrains.receiptscanner.data.service.TransactionCategorizationService
+import com.jetbrains.receiptscanner.data.service.toBankAccount
+import com.jetbrains.receiptscanner.data.service.toBankTransaction
 import com.jetbrains.receiptscanner.database.ReceiptScannerDatabase
 import com.jetbrains.receiptscanner.domain.model.BankAccount
 import com.jetbrains.receiptscanner.domain.model.BankTransaction
@@ -9,32 +15,62 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
 class BankDataSourceImpl(
-    private val database: ReceiptScannerDatabase
+    private val database: ReceiptScannerDatabase,
+    private val plaidService: PlaidService,
+    private val secureStorage: SecureStorage,
+    private val categorizationService: TransactionCategorizationService
 ) : BankDataSource {
 
-    // Remote operations (Plaid API) - These would be implemented with actual Plaid SDK
+    // Remote operations (Plaid API)
     override suspend fun connectAccount(publicToken: String): Result<BankAccount> {
-        // TODO: Implement Plaid API integration
-        return Result.failure(NotImplementedError("Plaid API integration not implemented yet"))
-    }
+        return plaidService.exchangePublicToken(publicToken).mapCatching { accountInfo ->
+            // Store access token securely
+            val primaryAccount = accountInfo.accounts.first()
+            val accessTokenKey = SecureStorageKeys.accessTokenKey(primaryAccount.accountId)
+            val itemIdKey = SecureStorageKeys.itemIdKey(primaryAccount.accountId)
 
-    override suspend fun fetchTransactions(accountId: String): Result<List<BankTransaction>> {
-        // TODO: Implement Plaid API integration
-        return Result.failure(NotImplementedError("Plaid API integration not implemented yet"))
-    }
+            secureStorage.store(accessTokenKey, accountInfo.accessToken).getOrThrow()
+            secureStorage.store(itemIdKey, accountInfo.itemId).getOrThrow()
 
-    override suspend fun categorizeTransactions(transactions: List<BankTransaction>): List<BankTransaction> {
-        // TODO: Implement transaction categorization logic
-        return transactions.map { transaction ->
-            transaction.copy(
-                isGroceryRelated = isGroceryMerchant(transaction.merchantName)
-            )
+            // Convert to domain model and return the primary account
+            primaryAccount.toBankAccount(primaryAccount.institutionName ?: "Unknown Bank")
         }
     }
 
+    override suspend fun fetchTransactions(accountId: String): Result<List<BankTransaction>> {
+        return runCatching {
+            val accessTokenKey = SecureStorageKeys.accessTokenKey(accountId)
+            val accessToken = secureStorage.retrieve(accessTokenKey).getOrThrow()
+                ?: throw IllegalStateException("No access token found for account $accountId")
+
+            val plaidTransactions = plaidService.fetchTransactions(accessToken, accountId).getOrThrow()
+            plaidTransactions.map { it.toBankTransaction() }
+        }
+    }
+
+    override suspend fun categorizeTransactions(transactions: List<BankTransaction>): List<BankTransaction> {
+        return categorizationService.categorizeTransactions(transactions)
+    }
+
     override suspend fun disconnectAccount(accountId: String): Result<Unit> {
-        // TODO: Implement Plaid API integration
-        return deactivateBankAccount(accountId)
+        return runCatching {
+            val accessTokenKey = SecureStorageKeys.accessTokenKey(accountId)
+            val itemIdKey = SecureStorageKeys.itemIdKey(accountId)
+
+            val accessToken = secureStorage.retrieve(accessTokenKey).getOrNull()
+
+            // Remove from Plaid if we have the access token
+            accessToken?.let { token ->
+                plaidService.removeAccount(token).getOrThrow()
+            }
+
+            // Remove stored credentials
+            secureStorage.remove(accessTokenKey).getOrThrow()
+            secureStorage.remove(itemIdKey).getOrThrow()
+
+            // Deactivate locally
+            deactivateBankAccount(accountId).getOrThrow()
+        }
     }
 
     // Local database operations
@@ -191,18 +227,5 @@ class BankDataSourceImpl(
         }
     }
 
-    private fun isGroceryMerchant(merchantName: String): Boolean {
-        val groceryKeywords = listOf(
-            "KROGER", "WALMART", "SAFEWAY", "PUBLIX", "WHOLE FOODS", "TARGET",
-            "COSTCO", "SAM'S CLUB", "TRADER JOE", "ALDI", "FOOD LION",
-            "HARRIS TEETER", "WEGMANS", "GIANT", "STOP & SHOP", "KING SOOPERS",
-            "RALPH", "VONS", "ALBERTSONS", "MEIJER", "H-E-B", "WINCO",
-            "FRESH MARKET", "PIGGLY WIGGLY", "BI-LO", "WINN-DIXIE"
-        )
 
-        val upperMerchant = merchantName.uppercase()
-        return groceryKeywords.any { keyword ->
-            upperMerchant.contains(keyword)
-        }
-    }
 }

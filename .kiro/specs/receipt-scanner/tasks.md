@@ -7,6 +7,7 @@
   - Set up platform-specific modules (androidApp, iosApp) with native UI frameworks
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: set up KMP project foundation with Clean Architecture" && git push`
   - _Requirements: 1.1, 1.2, 1.3_
 
 - [x] 2. Implement core data models and database schema
@@ -17,6 +18,7 @@
   - Create database migration scripts and version management
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: implement core data models and database schema" && git push`
   - _Requirements: 4.1, 4.2, 4.3, 9.1, 9.2_
 
 - [ ] 3. Build bank account integration with Plaid API
@@ -27,6 +29,7 @@
   - Implement transaction sync with real-time updates and error handling
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: implement bank account integration with Plaid API" && git push`
   - _Requirements: 10.1, 10.2, 11.1, 11.2, 11.3_
 
 - [ ] 4. Build computer vision pipeline for receipt detection
@@ -37,6 +40,7 @@
   - Build receipt detection confidence scoring for automatic capture triggering
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: implement computer vision pipeline for receipt detection" && git push`
   - _Requirements: 1.1, 1.2, 2.1, 2.4, 2.5_
 
 - [ ] 4.1 Implement OpenCV Mobile for geometric corrections
@@ -47,6 +51,7 @@
   - Add noise reduction and image stabilization for camera shake
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: implement OpenCV Mobile for geometric corrections" && git push`
   - _Requirements: 1.5, 2.6, 4.1_
 
 - [ ] 4.2 Create real-time image quality assessment system
@@ -57,6 +62,7 @@
   - Implement real-time quality scoring with color-coded feedback
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: create real-time image quality assessment system" && git push`
   - _Requirements: 2.1, 2.2, 2.3, 2.4_
 
 - [ ] 5. Implement multi-stage OCR processing architecture
@@ -67,6 +73,7 @@
   - Add processing stage progress tracking and user feedback
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: implement multi-stage OCR processing architecture" && git push`
   - _Requirements: 3.1, 3.2, 3.4, 3.5_
 
 - [ ] 5.1 Build Stage 1: Fast preview OCR with PaddleOCR text detection
@@ -77,6 +84,7 @@
   - Build quality assessment integration with text detection results
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: build Stage 1 fast preview OCR with PaddleOCR text detection" && git push`
   - _Requirements: 1.2, 2.1, 3.1_
 
 - [ ] 5.2 Implement Stage 2: Full OCR processing with PaddleOCR PP-OCRv4+
@@ -87,6 +95,7 @@
   - Add memory management for large model loading and processing
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: implement Stage 2 full OCR processing with PaddleOCR PP-OCRv4+" && git push`
   - _Requirements: 3.2, 3.3, 4.1, 4.2_
 
 - [ ] 6. Build receipt-specific text structure analysis system
@@ -97,6 +106,7 @@
   - Create date/time extraction with multiple format support
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: build receipt-specific text structure analysis system" && git push`
   - _Requirements: 4.2, 4.3, 4.4_
 
 - [ ] 6.1 Implement intelligent item line parsing
@@ -107,6 +117,7 @@
   - Create confidence scoring for each parsed item component
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: implement intelligent item line parsing" && git push`
   - _Requirements: 4.1, 4.2, 5.1_
 
 - [ ] 6.2 Build multi-level confidence scoring system
@@ -117,6 +128,7 @@
   - Create overall receipt confidence score combining all factors
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: build multi-level confidence scoring system" && git push`
   - _Requirements: 4.6, 5.1, 5.2_
 
 - [ ] 7. Add EasyOCR as fallback engine for challenging receipts
@@ -127,6 +139,7 @@
   - Optimize memory usage when switching between OCR engines
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: add EasyOCR as fallback engine for challenging receipts" && git push`
   - _Requirements: 4.1, 4.6, 7.2_
 
 - [ ] 8. Build comprehensive OCR validation system with heuristics
@@ -137,6 +150,7 @@
   - Create receipt format validation for major grocery store layouts
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: build comprehensive OCR validation system with heuristics" && git push`
   - _Requirements: 4.6, 5.1, 5.2, 5.3_
 
 - [ ] 9. Implement platform-specific camera integration
@@ -147,6 +161,7 @@
   - Build camera guidance system with quality indicators and feedback
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: implement platform-specific camera integration" && git push`
   - _Requirements: 1.1, 1.2, 1.4, 2.1, 2.2, 2.3, 2.6_
 
 - [ ] 10. Create engaging OCR processing experience
@@ -157,6 +172,7 @@
   - Create error recovery flows for failed OCR processing
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: create engaging OCR processing experience" && git push`
   - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5_
 
 - [ ] 11. Build manual correction interface for OCR results
@@ -167,6 +183,7 @@
   - Create save/cancel flows for manual corrections
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: build manual correction interface for OCR results" && git push`
   - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6_
 
 - [ ] 12. Implement intelligent transaction matching system
@@ -177,6 +194,7 @@
   - Create enhanced transaction views showing receipt details
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: implement intelligent transaction matching system" && git push`
   - _Requirements: 12.1, 12.2, 12.3, 12.4, 12.5, 12.6_
 
 - [ ] 13. Add offline capability with queued processing
@@ -187,6 +205,7 @@
   - Implement storage management with cleanup of processed images
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: add offline capability with queued processing" && git push`
   - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5_
 
 - [ ] 14. Build receipt history and search functionality
@@ -197,6 +216,7 @@
   - Implement receipt deletion with confirmation and bulk operations
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: build receipt history and search functionality" && git push`
   - _Requirements: 9.1, 9.2, 9.3, 9.4, 9.5, 9.6_
 
 - [ ] 15. Implement security and privacy features
@@ -207,6 +227,7 @@
   - Build data export and deletion features for user privacy control
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: implement security and privacy features" && git push`
   - _Requirements: 8.1, 8.2, 8.3, 8.4, 8.5_
 
 - [ ] 16. Add comprehensive error handling and recovery
@@ -217,6 +238,7 @@
   - Implement graceful degradation when services are unavailable
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: add comprehensive error handling and recovery" && git push`
   - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5_
 
 - [ ] 17. Optimize performance and conduct testing
@@ -229,6 +251,7 @@
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
   - Run `./gradlew clean build test` to verify all tests pass and performance optimizations work
   - Analyze build and test errors for performance bottlenecks, test failures, or optimization conflicts
+  - Commit and push changes: `git add . && git commit -m "feat: optimize performance and add comprehensive testing" && git push`
   - _Requirements: 3.4, 4.1, 6.1_
 
 - [ ] 18. Build native UI implementations
@@ -239,6 +262,7 @@
   - Create responsive layouts for different screen sizes and orientations
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: build native UI implementations for Android and iOS" && git push`
   - _Requirements: 1.1, 1.4, 2.1, 3.1, 5.1, 9.2_
 
 - [ ] 19. Integrate and test complete user flows
@@ -251,4 +275,5 @@
   - Analyze build and test errors for integration issues, flow coordination problems, or end-to-end testing failures
   - Run `./gradlew clean build` to verify project setup and resolve any build issues
   - Analyze build output for dependency conflicts, version mismatches, or missing configurations across all platforms.
+  - Commit and push changes: `git add . && git commit -m "feat: complete integration and end-to-end testing" && git push`
   - _Requirements: All requirements integration testing_
