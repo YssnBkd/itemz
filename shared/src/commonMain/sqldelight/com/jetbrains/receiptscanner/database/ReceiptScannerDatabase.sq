@@ -1,0 +1,206 @@
+-- Bank accounts table
+CREATE TABLE bank_accounts (
+    id TEXT NOT NULL PRIMARY KEY,
+    institution_name TEXT NOT NULL,
+    account_name TEXT NOT NULL,
+    account_type TEXT NOT NULL,
+    last_four TEXT NOT NULL,
+    is_active INTEGER NOT NULL DEFAULT 1,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
+);
+
+-- Bank transactions table
+CREATE TABLE bank_transactions (
+    id TEXT NOT NULL PRIMARY KEY,
+    account_id TEXT NOT NULL,
+    merchant_name TEXT NOT NULL,
+    amount REAL NOT NULL,
+    transaction_date INTEGER NOT NULL,
+    is_grocery_related INTEGER NOT NULL DEFAULT 0,
+    matched_receipt_id TEXT,
+    created_at INTEGER NOT NULL,
+    FOREIGN KEY (account_id) REFERENCES bank_accounts(id),
+    FOREIGN KEY (matched_receipt_id) REFERENCES receipts(id)
+);
+
+-- Receipts table
+CREATE TABLE receipts (
+    id TEXT NOT NULL PRIMARY KEY,
+    store_name TEXT NOT NULL,
+    store_address TEXT,
+    store_chain_id TEXT,
+    subtotal REAL NOT NULL,
+    tax_amount REAL NOT NULL,
+    total_amount REAL NOT NULL,
+    receipt_date INTEGER NOT NULL,
+    image_path TEXT,
+    processing_status TEXT NOT NULL,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
+);
+
+-- Receipt items table
+CREATE TABLE receipt_items (
+    id TEXT NOT NULL PRIMARY KEY,
+    receipt_id TEXT NOT NULL,
+    item_name TEXT NOT NULL,
+    normalized_name TEXT NOT NULL,
+    price REAL NOT NULL,
+    quantity INTEGER NOT NULL,
+    category TEXT NOT NULL,
+    confidence REAL NOT NULL,
+    line_number INTEGER NOT NULL,
+    FOREIGN KEY (receipt_id) REFERENCES receipts(id)
+);
+
+-- Indexes for performance
+CREATE INDEX idx_transactions_date ON bank_transactions(transaction_date);
+CREATE INDEX idx_transactions_grocery ON bank_transactions(is_grocery_related);
+CREATE INDEX idx_receipts_date ON receipts(receipt_date);
+CREATE INDEX idx_receipt_items_receipt ON receipt_items(receipt_id);
+
+-- Receipt queries
+selectAllReceipts:
+SELECT * FROM receipts ORDER BY receipt_date DESC LIMIT ? OFFSET ?;
+
+selectReceiptById:
+SELECT * FROM receipts WHERE id = ?;
+
+insertReceipt:
+INSERT INTO receipts (id, store_name, store_address, store_chain_id, subtotal, tax_amount, total_amount, receipt_date, image_path, processing_status, created_at, updated_at)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateReceipt:
+UPDATE receipts SET
+    store_name = ?, store_address = ?, store_chain_id = ?,
+    subtotal = ?, tax_amount = ?, total_amount = ?,
+    receipt_date = ?, image_path = ?, processing_status = ?,
+    updated_at = ?
+WHERE id = ?;
+
+deleteReceipt:
+DELETE FROM receipts WHERE id = ?;
+
+searchReceiptsByStore:
+SELECT * FROM receipts WHERE store_name LIKE '%' || ? || '%' ORDER BY receipt_date DESC;
+
+searchReceiptsByDateRange:
+SELECT * FROM receipts WHERE receipt_date BETWEEN ? AND ? ORDER BY receipt_date DESC;
+
+searchReceiptsByAmount:
+SELECT * FROM receipts WHERE total_amount BETWEEN ? AND ? ORDER BY receipt_date DESC;
+
+-- Receipt items queries
+selectReceiptItems:
+SELECT * FROM receipt_items WHERE receipt_id = ? ORDER BY line_number;
+
+insertReceiptItem:
+INSERT INTO receipt_items (id, receipt_id, item_name, normalized_name, price, quantity, category, confidence, line_number)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateReceiptItem:
+UPDATE receipt_items SET
+    item_name = ?, normalized_name = ?, price = ?,
+    quantity = ?, category = ?, confidence = ?
+WHERE id = ?;
+
+deleteReceiptItems:
+DELETE FROM receipt_items WHERE receipt_id = ?;
+
+searchReceiptItemsByName:
+SELECT ri.*, r.store_name, r.receipt_date
+FROM receipt_items ri
+JOIN receipts r ON ri.receipt_id = r.id
+WHERE ri.item_name LIKE '%' || ? || '%' OR ri.normalized_name LIKE '%' || ? || '%'
+ORDER BY r.receipt_date DESC;
+
+-- Bank account queries
+selectAllBankAccounts:
+SELECT * FROM bank_accounts WHERE is_active = 1 ORDER BY created_at DESC;
+
+selectBankAccountById:
+SELECT * FROM bank_accounts WHERE id = ?;
+
+insertBankAccount:
+INSERT INTO bank_accounts (id, institution_name, account_name, account_type, last_four, is_active, created_at, updated_at)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+
+updateBankAccount:
+UPDATE bank_accounts SET
+    institution_name = ?, account_name = ?, account_type = ?,
+    last_four = ?, is_active = ?, updated_at = ?
+WHERE id = ?;
+
+deactivateBankAccount:
+UPDATE bank_accounts SET is_active = 0, updated_at = ? WHERE id = ?;
+
+-- Bank transaction queries
+selectTransactionsByAccount:
+SELECT * FROM bank_transactions WHERE account_id = ? ORDER BY transaction_date DESC LIMIT ? OFFSET ?;
+
+selectGroceryTransactions:
+SELECT * FROM bank_transactions WHERE is_grocery_related = 1 ORDER BY transaction_date DESC LIMIT ? OFFSET ?;
+
+selectUnmatchedGroceryTransactions:
+SELECT * FROM bank_transactions
+WHERE is_grocery_related = 1 AND matched_receipt_id IS NULL
+ORDER BY transaction_date DESC;
+
+selectTransactionById:
+SELECT * FROM bank_transactions WHERE id = ?;
+
+insertBankTransaction:
+INSERT INTO bank_transactions (id, account_id, merchant_name, amount, transaction_date, is_grocery_related, matched_receipt_id, created_at)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+
+updateBankTransaction:
+UPDATE bank_transactions SET
+    merchant_name = ?, amount = ?, transaction_date = ?,
+    is_grocery_related = ?, matched_receipt_id = ?
+WHERE id = ?;
+
+matchTransactionToReceipt:
+UPDATE bank_transactions SET matched_receipt_id = ? WHERE id = ?;
+
+unmatchTransaction:
+UPDATE bank_transactions SET matched_receipt_id = NULL WHERE id = ?;
+
+selectTransactionsByDateRange:
+SELECT * FROM bank_transactions
+WHERE transaction_date BETWEEN ? AND ?
+ORDER BY transaction_date DESC;
+
+selectTransactionsByMerchant:
+SELECT * FROM bank_transactions
+WHERE merchant_name LIKE '%' || ? || '%'
+ORDER BY transaction_date DESC;
+
+-- Statistics queries
+countReceiptsByMonth:
+SELECT
+    strftime('%Y-%m', datetime(receipt_date, 'unixepoch')) receipt_month,
+    COUNT(*) receipt_count,
+    SUM(total_amount) total_spent
+FROM receipts
+GROUP BY strftime('%Y-%m', datetime(receipt_date, 'unixepoch'))
+ORDER BY strftime('%Y-%m', datetime(receipt_date, 'unixepoch')) DESC;
+
+countItemsByCategory:
+SELECT
+    category,
+    COUNT(*) item_count,
+    SUM(price * quantity) total_spent
+FROM receipt_items
+GROUP BY category
+ORDER BY SUM(price * quantity) DESC;
+
+selectTopStores:
+SELECT
+    store_name,
+    COUNT(*) visit_count,
+    SUM(total_amount) total_spent
+FROM receipts
+GROUP BY store_name
+ORDER BY SUM(total_amount) DESC
+LIMIT ?;
