@@ -52,7 +52,37 @@ data class Rectangle(
     val y: Float,
     val width: Float,
     val height: Float
-)
+) {
+    // Convenience properties for different coordinate systems
+    val left: Float get() = x
+    val top: Float get() = y
+    val right: Float get() = x + width
+    val bottom: Float get() = y + height
+    val centerX: Float get() = x + width / 2f
+    val centerY: Float get() = y + height / 2f
+
+    companion object {
+        // Factory method for left, top, right, bottom coordinates
+        fun fromBounds(left: Float, top: Float, right: Float, bottom: Float): Rectangle {
+            return Rectangle(
+                x = left,
+                y = top,
+                width = right - left,
+                height = bottom - top
+            )
+        }
+    }
+
+    fun contains(point: Point): Boolean {
+        return point.x >= left && point.x <= right && point.y >= top && point.y <= bottom
+    }
+
+    fun overlaps(other: Rectangle): Boolean {
+        return left < other.right && right > other.left && top < other.bottom && bottom > other.top
+    }
+
+    fun area(): Float = width * height
+}
 
 /**
  * Image quality assessment result

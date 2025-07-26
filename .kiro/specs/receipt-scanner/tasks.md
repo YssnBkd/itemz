@@ -116,7 +116,7 @@
   - Commit and push changes: `git add . && git commit -m "feat: implement Stage 2 full OCR processing with PaddleOCR PP-OCRv5 recognition" && git push`
   - _Requirements: 3.2, 3.3, 4.1, 4.2_
 
-- [ ] 6. Build receipt-specific text structure analysis system
+- [-] 6. Build receipt-specific text structure analysis system
   - Create ReceiptParser class to analyze OCR results from PaddleOCR PP-OCRv5 output
   - Implement merchant header detection using pattern matching, positioning, and font size analysis
   - Build item line identification using text alignment, spacing patterns, and price detection
@@ -134,7 +134,7 @@
   - Commit and push changes: `git add . && git commit -m "feat: build receipt-specific text structure analysis system" && git push`
   - _Requirements: 4.2, 4.3, 4.4_
 
-- [ ] 6.1 Implement intelligent item line parsing
+- [x] 6.1 Implement intelligent item line parsing
   - Create item name extraction with quantity detection (e.g., "2x Bananas")
   - Build price parsing with decimal alignment and currency symbol handling
   - Implement line total calculation and validation against individual prices
@@ -145,7 +145,7 @@
   - Commit and push changes: `git add . && git commit -m "feat: implement intelligent item line parsing" && git push`
   - _Requirements: 4.1, 4.2, 5.1_
 
-- [ ] 6.2 Build multi-level confidence scoring system
+- [x] 6.2 Build multi-level confidence scoring system
   - Implement OCR character confidence aggregation from PaddleOCR
   - Create structural validation confidence based on receipt format compliance
   - Add mathematical validation confidence (totals, calculations)
