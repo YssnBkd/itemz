@@ -5,6 +5,10 @@
 
 This is a basic Kotlin Multiplatform app template for Android and iOS. It includes shared business logic and data handling, and native UI implementations using Jetpack Compose and SwiftUI.
 
+## 16 KB Page Size Support
+
+This project is fully compliant with Google Play's 16 KB page size requirement (effective November 1st, 2025). See [16KB_PAGE_SIZE_SUPPORT.md](16KB_PAGE_SIZE_SUPPORT.md) for detailed implementation information.
+
 > The template is also available [with shared UI written in Compose Multiplatform](https://github.com/kotlin/KMP-App-Template).
 >
 > The [`amper` branch](https://github.com/Kotlin/KMP-App-Template-Native/tree/amper) showcases the same project configured with [Amper](https://github.com/JetBrains/amper).

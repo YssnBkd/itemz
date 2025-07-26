@@ -55,6 +55,10 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+        // Configure for 16 KB page size support
+        jniLibs {
+            useLegacyPackaging = false  // Use uncompressed native libraries for 16 KB alignment
+        }
     }
     buildTypes {
         getByName("release") {

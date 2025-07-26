@@ -95,7 +95,7 @@ class ReceiptDetectorImpl(
                 }
 
                 detectionResults?.copy(processingTimeMs = processingTime)
-+                    ?: throw IllegalStateException("Detection results were not computed")
+                    ?: throw IllegalStateException("Detection results were not computed")
             }
         }
 
