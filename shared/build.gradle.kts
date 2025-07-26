@@ -36,6 +36,12 @@ kotlin {
             implementation(libs.plaid.android)
             implementation(libs.androidx.security.crypto)
             implementation(libs.onnxruntime.android)
+
+            // Camera dependencies
+            implementation(libs.androidx.camera.core)
+            implementation(libs.androidx.camera.camera2)
+            implementation(libs.androidx.camera.lifecycle)
+            implementation(libs.androidx.camera.view)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)

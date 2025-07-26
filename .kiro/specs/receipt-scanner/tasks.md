@@ -116,7 +116,7 @@
   - Commit and push changes: `git add . && git commit -m "feat: implement Stage 2 full OCR processing with PaddleOCR PP-OCRv5 recognition" && git push`
   - _Requirements: 3.2, 3.3, 4.1, 4.2_
 
-- [-] 6. Build receipt-specific text structure analysis system
+- [x] 6. Build receipt-specific text structure analysis system
   - Create ReceiptParser class to analyze OCR results from PaddleOCR PP-OCRv5 output
   - Implement merchant header detection using pattern matching, positioning, and font size analysis
   - Build item line identification using text alignment, spacing patterns, and price detection
@@ -193,7 +193,7 @@
   - Commit and push changes: `git add . && git commit -m "feat: build comprehensive OCR validation system with intelligent heuristics" && git push`
   - _Requirements: 4.6, 5.1, 5.2, 5.3_
 
-- [ ] 9. Implement platform-specific camera integration
+- [-] 9. Implement platform-specific camera integration
   - Build Android camera implementation using CameraX with real-time preview
   - Create iOS camera implementation using AVFoundation
   - Add real-time receipt detection with boundary overlay visualization

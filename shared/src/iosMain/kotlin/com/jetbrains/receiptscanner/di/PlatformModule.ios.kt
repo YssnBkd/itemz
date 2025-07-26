@@ -56,4 +56,9 @@ actual val platformModule = module {
     single<com.jetbrains.receiptscanner.data.vision.ImageQualityAssessor> {
         com.jetbrains.receiptscanner.data.vision.ImageQualityAssessorFactory.create()
     }
+
+    // Camera components
+    single<com.jetbrains.receiptscanner.data.camera.CameraGuidanceSystem> {
+        com.jetbrains.receiptscanner.data.camera.CameraGuidanceSystemImpl()
+    }
 }
