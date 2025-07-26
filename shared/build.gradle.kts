@@ -54,6 +54,11 @@ kotlin {
             api(libs.kmp.observable.viewmodel)
         }
 
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+            implementation(libs.kotlinx.coroutines.test)
+        }
+
         // Required by KMM-ViewModel
         all {
             languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")

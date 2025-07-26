@@ -1,6 +1,6 @@
 package com.jetbrains.receiptscanner.presentation
 
-import com.jetbrains.receiptscanner.domain.model.Receipt
+import com.jetbrains.receiptscanner.domain.usecase.ParsedReceipt
 import com.jetbrains.receiptscanner.domain.usecase.ScanProgress
 import com.jetbrains.receiptscanner.domain.usecase.ScanReceiptUseCase
 import com.rickclephas.kmp.observableviewmodel.ViewModel
@@ -23,6 +23,9 @@ class ReceiptScannerViewModel(
 
             scanReceiptUseCase.execute(imageBytes).collect { progress ->
                 when (progress) {
+                    is ScanProgress.Initializing -> {
+                        _uiState.value = _uiState.value.copy(scanProgress = "Initializing...")
+                    }
                     is ScanProgress.Processing -> {
                         _uiState.value = _uiState.value.copy(scanProgress = progress.message)
                     }
@@ -53,6 +56,6 @@ class ReceiptScannerViewModel(
 data class ReceiptScannerUiState(
     val isScanning: Boolean = false,
     val scanProgress: String? = null,
-    val scannedReceipt: Receipt? = null,
+    val scannedReceipt: ParsedReceipt? = null,
     val error: String? = null
 )
